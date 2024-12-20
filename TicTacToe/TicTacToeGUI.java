@@ -29,8 +29,8 @@ public class TicTacToeGUI extends JFrame {
         mainPanel = new JPanel(cardLayout);
 
         JPanel menuPanel = createMenuPanel();
-        GameMain gamePanelHumanVsAI = new GameMain(false);  // Human vs AI
-        GameMain gamePanelHumanVsHuman = new GameMain(true); // Human vs Human
+        GameMain gamePanelHumanVsAI = new GameMain(false, cardLayout, mainPanel);  // Pass references
+        GameMain gamePanelHumanVsHuman = new GameMain(true, cardLayout, mainPanel); // Pass references
 
         mainPanel.add(menuPanel, "Menu");
         mainPanel.add(gamePanelHumanVsAI, "HumanVsAI");
