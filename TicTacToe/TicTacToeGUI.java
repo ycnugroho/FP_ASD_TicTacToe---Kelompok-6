@@ -14,7 +14,7 @@ public class TicTacToeGUI extends JFrame {
 
     public TicTacToeGUI() {
         setTitle("Welcome to Tic Tac Toe");
-        setSize(390, 415);
+        setSize(380, 415);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
