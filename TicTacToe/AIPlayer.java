@@ -35,3 +35,4 @@ public abstract class AIPlayer {
     /** Abstract method to get next move. Return int[2] of {row, col} */
     public abstract int[] move();
  }
+ 
