@@ -1,3 +1,13 @@
+/**
+ * ES234317-Algorithm and Data Structures
+ * Semester Ganjil, 2024/2025
+ * Group Capstone Project
+ * Group #1
+ * 1 - 5026231030 - Jonathan Abimanyu Trisno
+ * 2 - 5026231032 - Yokanan Prawira Nugroho
+ * 3 - 5026231133 - Muhammad Rifqi Alfareza Santosa
+ */
+
 package TicTacToe;
 
 import java.awt.*;
@@ -25,9 +35,9 @@ public class GameMain extends JPanel {
     private Seed currentPlayer;  // the current player
     private JLabel statusBar;    // for displaying status message
     private AIPlayer aiPlayer;   // the AI player
-    private boolean isHumanVsHuman; // true for Human vs Human, false for Human vs AI
+    private boolean isHumanVsHuman;
 
-    /** Default constructor: sets the game mode to Human vs Human */
+    /** Constructor to setup the UI and game components */
     public GameMain() {
         this(true); // Default to Human vs Human
     }
@@ -35,46 +45,53 @@ public class GameMain extends JPanel {
     /** Constructor to setup the UI and game components for a specific mode */
     public GameMain(boolean isHumanVsHuman) {
         this.isHumanVsHuman = isHumanVsHuman;
-
+    
         // This JPanel fires MouseEvent
         super.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {  // mouse-clicked handler
-                int mouseX = e.getX();
-                int mouseY = e.getY();
-                // Get the row and column clicked
-                int row = mouseY / Cell.SIZE;
-                int col = mouseX / Cell.SIZE;
+public void mouseClicked(MouseEvent e) {
+    int mouseX = e.getX();
+    int mouseY = e.getY();
+    // Get the row and column clicked
+    int row = mouseY / Cell.SIZE;
+    int col = mouseX / Cell.SIZE;
 
-                if (currentState == State.PLAYING) {
-                    if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
-                            && board.cells[row][col].content == Seed.NO_SEED) {
-                        // Update cells[][] and return the new game state after the move
-                        currentState = board.stepGame(currentPlayer, row, col);
-
-                        // Check for game-over state
-                        if (currentState == State.PLAYING) {
-                            // Switch turns
-                            currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
-
-                            // AI makes its move only if mode is Human vs AI
-                            if (!isHumanVsHuman && currentPlayer == aiPlayer.mySeed) {
-                                int[] move = aiPlayer.move();
+    if (currentState == State.PLAYING) {
+        if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
+                && board.cells[row][col].content == Seed.NO_SEED) {
+            // Human player's move
+            currentState = board.stepGame(currentPlayer, row, col);
+            
+            // Switch player if game is still ongoing
+            if (currentState == State.PLAYING) {
+                currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+                
+                // AI's turn
+                if (currentPlayer == aiPlayer.mySeed) {
+                    // Add small delay to make AI's move visible
+                    Timer timer = new Timer(200, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent evt) {
+                            int[] move = aiPlayer.move();
+                            if (move != null && move.length == 2) {
                                 currentState = board.stepGame(currentPlayer, move[0], move[1]);
-
-                                // Switch back to human's turn
                                 if (currentState == State.PLAYING) {
                                     currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
                                 }
+                                repaint();
                             }
                         }
-                    }
-                } else {        // Game over
-                    newGame();  // Restart the game
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
                 }
-                // Refresh the drawing canvas
-                repaint();  // Callback paintComponent()
             }
+        }
+    } else {
+        newGame();  // Restart the game
+    }
+    repaint();
+}
         });
 
         // Setup the status bar (JLabel) to display status message
@@ -99,9 +116,10 @@ public class GameMain extends JPanel {
     /** Initialize the game (run once) */
     public void initGame() {
         board = new Board();  // Allocate the game board
-        aiPlayer = new AIPlayerMinimax(board); // Set AI implementation
-        aiPlayer.setSeed(Seed.NOUGHT);        // Set AI to play as NOUGHT
-    }
+        // Use the enhanced AI player instead of the basic one
+        aiPlayer = new AIPlayerEnhanced(board);  // Create AI player with the enhanced implementation
+        aiPlayer.setSeed(Seed.NOUGHT);          // AI plays as O
+    }    
 
     /** Reset the game-board contents and the current-state, ready for a new game */
     public void newGame() {
@@ -141,7 +159,7 @@ public class GameMain extends JPanel {
             public void run() {
                 JFrame frame = new JFrame(TITLE);
                 // Set the content-pane of the JFrame to an instance of main JPanel
-                frame.setContentPane(new GameMain(true)); // Default mode: Human vs Human
+                frame.setContentPane(new GameMain());
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.pack();
                 frame.setLocationRelativeTo(null); // Center the application window
