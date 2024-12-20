@@ -21,7 +21,7 @@ public class GameMain extends JPanel {
    private static final long serialVersionUID = 1L; // to prevent serializable warning
 
    // Define named constants for the drawing graphics
-   public static final String TITLE = "Tic Tac Toe";
+   public static final String TITLE = "Connect Four";
    public static final Color COLOR_BG = Color.WHITE;
    public static final Color COLOR_BG_STATUS = new Color(216, 216, 216);
    public static final Color COLOR_CROSS = new Color(239, 105, 80);  // Red #EF6950

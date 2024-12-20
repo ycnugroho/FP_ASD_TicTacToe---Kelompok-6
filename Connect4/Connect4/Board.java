@@ -61,37 +61,71 @@ public class Board {
     *  Update cells[selectedRow][selectedCol]. Compute and return the
     *  new game state (PLAYING, DRAW, CROSS_WON, NOUGHT_WON).
     */
+
+    public boolean hasWon(Seed player, int row, int col) {
+      // Check horizontal
+      for (int c = Math.max(0, col - 3); c <= Math.min(COLS - 4, col); c++) {
+         if (cells[row][c].content == player &&
+             cells[row][c + 1].content == player &&
+             cells[row][c + 2].content == player &&
+             cells[row][c + 3].content == player) {
+            return true;
+         }
+      }
+      // Check vertical
+      for (int r = Math.max(0, row - 3); r <= Math.min(ROWS - 4, row); r++) {
+         if (cells[r][col].content == player &&
+             cells[r + 1][col].content == player &&
+             cells[r + 2][col].content == player &&
+             cells[r + 3][col].content == player) {
+            return true;
+         }
+      }
+      // Check diagonal (\)
+      for (int r = Math.max(0, row - 3), c = Math.max(0, col - 3);
+           r <= Math.min(ROWS - 4, row) && c <= Math.min(COLS - 4, col);
+           r++, c++) {
+         if (cells[r][c].content == player &&
+             cells[r + 1][c + 1].content == player &&
+             cells[r + 2][c + 2].content == player &&
+             cells[r + 3][c + 3].content == player) {
+            return true;
+         }
+      }
+      // Check diagonal (/)
+      for (int r = Math.min(ROWS - 1, row + 3), c = Math.max(0, col - 3);
+           r >= Math.max(3, row) && c <= Math.min(COLS - 4, col);
+           r--, c++) {
+         if (cells[r][c].content == player &&
+             cells[r - 1][c + 1].content == player &&
+             cells[r - 2][c + 2].content == player &&
+             cells[r - 3][c + 3].content == player) {
+            return true;
+         }
+      }
+      return false;
+   }
+
    public State stepGame(Seed player, int selectedRow, int selectedCol) {
       // Update game board
       cells[selectedRow][selectedCol].content = player;
 
-      // Compute and return the new game state
-      if (cells[selectedRow][0].content == player  // 3-in-the-row
-                && cells[selectedRow][1].content == player
-                && cells[selectedRow][2].content == player
-             || cells[0][selectedCol].content == player // 3-in-the-column
-                && cells[1][selectedCol].content == player
-                && cells[2][selectedCol].content == player
-             || selectedRow == selectedCol     // 3-in-the-diagonal
-                && cells[0][0].content == player
-                && cells[1][1].content == player
-                && cells[2][2].content == player
-             || selectedRow + selectedCol == 2 // 3-in-the-opposite-diagonal
-                && cells[0][2].content == player
-                && cells[1][1].content == player
-                && cells[2][0].content == player) {
+      // Check for win
+      if (hasWon(player, selectedRow, selectedCol)) {
          return (player == Seed.CROSS) ? State.CROSS_WON : State.NOUGHT_WON;
-      } else {
-         // Nobody win. Check for DRAW (all cells occupied) or PLAYING.
-         for (int row = 0; row < ROWS; ++row) {
-            for (int col = 0; col < COLS; ++col) {
-               if (cells[row][col].content == Seed.NO_SEED) {
-                  return State.PLAYING; // still have empty cells
-               }
+      }
+
+      // Check for draw (board is full)
+      for (int r = 0; r < ROWS; r++) {
+         for (int c = 0; c < COLS; c++) {
+            if (cells[r][c].content == Seed.NO_SEED) {
+               return State.PLAYING; // At least one empty cell, game continues
             }
          }
-         return State.DRAW; // no empty cell, it's a draw
-      }
+      }   
+
+      // If no empty cells and no win, it's a draw
+      return State.DRAW;
    }
 
    /** Paint itself on the graphics canvas, given the Graphics context */
