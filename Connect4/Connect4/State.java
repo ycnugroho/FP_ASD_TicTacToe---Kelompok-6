@@ -8,6 +8,8 @@
  * 3 - 5026231133 - Muhammad Rifqi Alfareza Santosa
  */
 
+package Connect4;
+
 /**
  *  The enum State contains the various game states of the TTT game
  */

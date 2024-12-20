@@ -1,3 +1,4 @@
+
 /**
  * ES234317-Algorithm and Data Structures
  * Semester Ganjil, 2024/2025
@@ -7,6 +8,8 @@
  * 2 - 5026231032 - Yokanan Prawira Nugroho
  * 3 - 5026231133 - Muhammad Rifqi Alfareza Santosa
  */
+
+package Connect4;
 
 import java.awt.Image;
 import java.net.URL;

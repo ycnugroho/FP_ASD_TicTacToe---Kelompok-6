@@ -8,6 +8,8 @@
  * 3 - 5026231133 - Muhammad Rifqi Alfareza Santosa
  */
 
+package Connect4;
+
 import java.awt.*;
 /**
  * The Board class models the ROWS-by-COLS game board.
