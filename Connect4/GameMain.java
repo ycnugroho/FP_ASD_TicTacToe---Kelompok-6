@@ -19,7 +19,7 @@ public class GameMain extends JPanel {
    private static final long serialVersionUID = 1L; // to prevent serializable warning
 
    // Define named constants for the drawing graphics
-   public static final String TITLE = "Connect Four";
+   public static final String TITLE = "Tic Tac Toe";
    public static final Color COLOR_BG = Color.WHITE;
    public static final Color COLOR_BG_STATUS = new Color(216, 216, 216);
    public static final Color COLOR_CROSS = new Color(239, 105, 80);  // Red #EF6950
@@ -46,12 +46,23 @@ public class GameMain extends JPanel {
             int col = mouseX / Cell.SIZE;
 
             if (currentState == State.PLAYING) {
-               if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
-                     && board.cells[row][col].content == Seed.NO_SEED) {
-                  // Update cells[][] and return the new game state after the move
-                  currentState = board.stepGame(currentPlayer, row, col);
-                  // Switch player
-                  currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+               // if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
+               //       && board.cells[row][col].content == Seed.NO_SEED) {
+               //    // Update cells[][] and return the new game state after the move
+               //    currentState = board.stepGame(currentPlayer, row, col);
+               //    // Switch player
+               //    currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+               // }
+               if(col >= 0 && col < Board.COLS){
+                  for(int rowI = Board.ROWS -1; rowI >=0; rowI--){
+                     if(board.cells[rowI][col].content == Seed.NO_SEED){
+                        board.cells[rowI][col].content = currentPlayer;
+                        board.stepGame(currentPlayer, rowI, col);
+
+                        currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+                        break;
+                     }
+                  }
                }
             } else {        // game over
                newGame();  // restart the game
@@ -106,18 +117,19 @@ public class GameMain extends JPanel {
       board.paint(g);  // ask the game board to paint itself
 
       // Print status-bar message
+      // Play appropriate sound clip
       if (currentState == State.PLAYING) {
          statusBar.setForeground(Color.BLACK);
-         statusBar.setText((currentPlayer == Seed.CROSS) ? "X's Turn" : "O's Turn");
+         statusBar.setText((currentPlayer == Seed.CROSS) ? "Yellow's Turn" : "Red's Turn");
       } else if (currentState == State.DRAW) {
          statusBar.setForeground(Color.RED);
          statusBar.setText("It's a Draw! Click to play again.");
       } else if (currentState == State.CROSS_WON) {
          statusBar.setForeground(Color.RED);
-         statusBar.setText("'X' Won! Click to play again.");
+         statusBar.setText("'Yellow' Won! Click to play again.");
       } else if (currentState == State.NOUGHT_WON) {
          statusBar.setForeground(Color.RED);
-         statusBar.setText("'O' Won! Click to play again.");
+         statusBar.setText("'Red' Won! Click to play again.");
       }
    }
 
