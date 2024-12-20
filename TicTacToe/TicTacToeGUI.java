@@ -1,10 +1,7 @@
 package TicTacToe;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.geom.RoundRectangle2D;
 import javax.sound.sampled.*;
 import java.io.*;
 
@@ -57,12 +54,12 @@ public class TicTacToeGUI extends JFrame {
 
         humanVsAIButton.addActionListener(e -> {
             cardLayout.show(mainPanel, "HumanVsAI");
-            playSound("game_start.wav");
+            playSound("image and background/ok let's go sound effect.wav");
         });
 
         humanVsHumanButton.addActionListener(e -> {
             cardLayout.show(mainPanel, "HumanVsHuman");
-            playSound("game_start.wav");
+            playSound("image and background/Get Ready - Sound Effect.wav");
         });
 
         JPanel buttonPanel = new JPanel();
