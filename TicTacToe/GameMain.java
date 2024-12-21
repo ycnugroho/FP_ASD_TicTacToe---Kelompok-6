@@ -8,6 +8,7 @@
  * 3 - 5026231133 - Muhammad Rifqi Alfareza Santosa
  */
 
+//Untuk menjalankan TicTacToe 3x3 melalui class TicTacToeGUI.java
 package TicTacToe;
 
 import java.awt.*;
